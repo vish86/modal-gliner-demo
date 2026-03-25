@@ -1,0 +1,48 @@
+import json
+
+import modal
+
+APP_NAME = "gliner2-hello-world"
+MODEL_ID = "fastino/gliner2-base-v1"
+DEFAULT_TEXT = (
+    "Tim Cook unveiled iPhone 15 Pro for $999 in Cupertino; "
+    "reviewers praised the titanium design but criticized battery life."
+)
+SCHEMA = {
+    "announcement": [
+        "company::str",
+        "person::str",
+        "product::str",
+        "price::str",
+        "location::str",
+    ]
+}
+CLS = {"sentiment": ["positive", "negative", "neutral", "mixed"]}
+
+app = modal.App(APP_NAME)
+image = modal.Image.debian_slim(python_version="3.11").pip_install_from_requirements(
+    "requirements.txt"
+)
+
+
+@app.cls(image=image, cpu=2.0, memory=2048)
+class GLiNERService:
+    @modal.enter()
+    def load(self):
+        from gliner2 import GLiNER2
+
+        self.model = GLiNER2.from_pretrained(MODEL_ID)
+
+    @modal.method()
+    def analyze(self, text: str) -> dict:
+        m = self.model
+        return {
+            "structured": m.extract_json(text, SCHEMA),
+            "classification": m.classify_text(text, CLS, include_confidence=True),
+        }
+
+
+@app.local_entrypoint()
+def main(text: str = DEFAULT_TEXT):
+    print("Input:", text)
+    print(json.dumps(GLiNERService().analyze.remote(text), indent=2))

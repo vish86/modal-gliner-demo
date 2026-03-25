@@ -1,0 +1,23 @@
+# GLiNER2 (pulls `gliner` + pydantic). `gliner` needs torch, transformers, HF Hub, etc.
+gliner2
+torch>=2.0.0
+
+# Declared by `gliner` — listed explicitly so pip resolves everything in one pass.
+transformers>=4.51.3,<5.2.0
+huggingface_hub>=0.21.4
+tqdm
+sentencepiece
+onnxruntime
+
+# Hugging Face / downloads often assume `requests`; slim images can miss pieces of this tree.
+requests
+urllib3
+certifi
+charset-normalizer
+idna
+
+# Common companions for transformers / checkpoints
+safetensors
+tokenizers
+filelock
+packaging
