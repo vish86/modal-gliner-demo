@@ -16,29 +16,8 @@ Custom text:
 modal run gliner2_modal_demo.py --text "Your paragraph here."
 ```
 
-`gliner2_modal_demo.py` defines the app, installs from `requirements.txt`, loads the model in `@modal.enter()`, and exposes one remote method that returns structured JSON plus a classification. The entrypoint prints the result.
+`gliner2_modal_demo.py` defines the app, installs deps with `pip_install` on the image, loads the model in `@modal.enter()`, and exposes one remote method that returns structured JSON plus a classification. The entrypoint prints the result.
 
-## Dependencies
+Dependencies are the package list passed to `pip_install` at the top of that file (gliner2, torch, transformers stack, HTTP stack, etc.). If something is missing at runtime, add it there and run again.
 
-Everything installs from `requirements.txt`:
-
-- gliner2
-- torch (>=2.0.0)
-- transformers (>=4.51.3, <5.2.0)
-- huggingface_hub (>=0.21.4)
-- tqdm
-- sentencepiece
-- onnxruntime
-- requests
-- urllib3
-- certifi
-- charset-normalizer
-- idna
-- safetensors
-- tokenizers
-- filelock
-- packaging
-
-If the container is missing something at runtime, add it there and run again.
-
-Later you might swap `SCHEMA` / `CLS` for your domain or expose `analyze` over HTTP using FastAPI etc. —  nothing here depends on that.
+Later you might swap `SCHEMA` / `CLS` for your domain or expose `analyze` over HTTP using FastAPI etc. — nothing here depends on that.

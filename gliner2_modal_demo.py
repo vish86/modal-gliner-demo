@@ -20,8 +20,23 @@ SCHEMA = {
 CLS = {"sentiment": ["positive", "negative", "neutral", "mixed"]}
 
 app = modal.App(APP_NAME)
-image = modal.Image.debian_slim(python_version="3.11").pip_install_from_requirements(
-    "requirements.txt"
+image = modal.Image.debian_slim(python_version="3.11").pip_install(
+    "gliner2",
+    "torch>=2.0.0",
+    "transformers>=4.51.3,<5.2.0",
+    "huggingface_hub>=0.21.4",
+    "tqdm",
+    "sentencepiece",
+    "onnxruntime",
+    "requests",
+    "urllib3",
+    "certifi",
+    "charset-normalizer",
+    "idna",
+    "safetensors",
+    "tokenizers",
+    "filelock",
+    "packaging",
 )
 
 
